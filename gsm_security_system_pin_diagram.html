@@ -1,0 +1,158 @@
+
+<style>
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.pt{width:100%;border-collapse:collapse;font-size:12.5px}
+.pt th{padding:6px 10px;border-bottom:1px solid var(--color-border-secondary);font-size:11px;font-weight:500;color:var(--color-text-secondary);text-align:left;white-space:nowrap}
+.pt td{padding:5px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:middle;line-height:1.4}
+.pt .gh td{background:var(--color-background-secondary);font-size:11px;font-weight:500;color:var(--color-text-secondary);padding:5px 10px;letter-spacing:0.02em}
+.pb{font-family:var(--font-mono);font-size:11px;padding:2px 6px;border-radius:4px;display:inline-block;white-space:nowrap;font-weight:500}
+.note{padding:9px 14px;border-radius:8px;font-size:12px;margin:10px 0 14px;border:0.5px solid var(--color-border-warning);background:var(--color-background-warning);color:var(--color-text-warning);line-height:1.5}
+.note code{font-family:var(--font-mono);background:rgba(0,0,0,0.08);padding:0 4px;border-radius:3px}
+</style>
+
+<h2 class="sr-only">GSM Smart Security and Monitoring System — Complete Pin Wiring Diagram</h2>
+
+<div style="display:flex;flex-wrap:wrap;gap:5px;padding-bottom:13px">
+  <span style="font-size:11px;color:var(--color-text-secondary);align-self:center;margin-right:2px">Components:</span>
+  <span style="background:#E6F1FB;color:#0C447C;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:500">HC-SR04</span>
+  <span style="background:#EEEDFE;color:#3C3489;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:500">PIR sensor</span>
+  <span style="background:#FAEEDA;color:#633806;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:500">SIM800L GSM</span>
+  <span style="background:#E1F5EE;color:#085041;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:500">LCD I²C</span>
+  <span style="background:#FAECE7;color:#712B13;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:500">Red LED</span>
+  <span style="background:#EAF3DE;color:#27500A;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:500">Green LED</span>
+  <span style="background:#F1EFE8;color:#444441;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:500">Relay</span>
+  <span style="background:#FBEAF0;color:#72243E;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:500">LM35</span>
+</div>
+
+<svg width="100%" viewBox="0 0 680 305" role="img" style="font-family:var(--font-sans)">
+  <title>Arduino Uno R3 pin wiring diagram for GSM security system</title>
+  <desc>Color-coded wiring showing all 13 signal connections: HC-SR04 on D2 and D8, PIR on D4, Relay on D5, Red LED on D6, Green LED on D7, GSM on D0/D1, LM35 on A0, LCD I2C on A4/A5.</desc>
+
+  <!-- PCB body -->
+  <rect x="260" y="52" width="165" height="240" rx="10" fill="#1a5c28" stroke="#0d3816" stroke-width="1.5"/>
+  <rect x="268" y="60" width="149" height="224" rx="6" fill="none" stroke="#2d8a3e" stroke-width="0.5" opacity="0.6"/>
+
+  <!-- USB-B stub at top -->
+  <rect x="306" y="36" width="73" height="20" rx="3" fill="#2a2a2a" stroke="#111" stroke-width="1"/>
+  <rect x="312" y="39" width="10" height="7" rx="1" fill="#555"/><rect x="326" y="39" width="10" height="7" rx="1" fill="#555"/>
+  <rect x="340" y="39" width="10" height="7" rx="1" fill="#555"/><rect x="354" y="39" width="10" height="7" rx="1" fill="#555"/>
+
+  <!-- Board labels -->
+  <text x="342" y="83" text-anchor="middle" font-size="12" font-weight="500" fill="#82dd9a">Arduino Uno R3</text>
+  <text x="342" y="99" text-anchor="middle" font-size="9" fill="#4a8a5c">ATmega328P · 16 MHz</text>
+
+  <!-- ATmega chip -->
+  <rect x="300" y="118" width="84" height="64" rx="3" fill="#111" stroke="#3a3a3a" stroke-width="0.5"/>
+  <text x="342" y="148" text-anchor="middle" font-size="10" fill="#666">ATmega</text>
+  <text x="342" y="162" text-anchor="middle" font-size="10" fill="#666">328P</text>
+
+  <!-- Crystal -->
+  <rect x="315" y="197" width="54" height="13" rx="2" fill="#c4950e" stroke="#7a5a08" stroke-width="0.5"/>
+  <text x="342" y="207" text-anchor="middle" font-size="7.5" fill="#3a2500">16.000 MHz</text>
+
+  <!-- Power jack -->
+  <rect x="262" y="273" width="22" height="17" rx="2" fill="#111" stroke="#333" stroke-width="0.5"/>
+
+  <!-- Reset button -->
+  <circle cx="408" cy="245" r="6.5" fill="#cc2222" stroke="#882222" stroke-width="0.5"/>
+  <text x="408" y="249" text-anchor="middle" font-size="6" fill="#fff">RST</text>
+
+  <!-- Status LEDs on board -->
+  <circle cx="392" cy="258" r="3" fill="#22cc55"/>
+  <circle cx="381" cy="258" r="3" fill="#ddbb00"/>
+
+  <!-- Pin header strips (left and right) -->
+  <rect x="253" y="59" width="9" height="227" rx="2" fill="#132b17" stroke="#0a1e0d" stroke-width="0.5"/>
+  <rect x="423" y="59" width="9" height="227" rx="2" fill="#132b17" stroke="#0a1e0d" stroke-width="0.5"/>
+
+  <!-- LEFT SIDE PIN CIRCLES (cx=255) -->
+  <circle cx="255" cy="72"  r="5.5" fill="#e24b4a" stroke="#a32d2d" stroke-width="0.8"/>
+  <circle cx="255" cy="101" r="5.5" fill="#5F5E5A" stroke="#3a3a38" stroke-width="0.8"/>
+  <circle cx="255" cy="149" r="5.5" fill="#D4537E" stroke="#933060" stroke-width="0.8"/>
+  <circle cx="255" cy="203" r="5.5" fill="#1D9E75" stroke="#0d6e52" stroke-width="0.8"/>
+  <circle cx="255" cy="232" r="5.5" fill="#1D9E75" stroke="#0d6e52" stroke-width="0.8"/>
+
+  <!-- RIGHT SIDE PIN CIRCLES (cx=430) -->
+  <circle cx="430" cy="66"  r="5.5" fill="#BA7517" stroke="#7a4a00" stroke-width="0.8"/>
+  <circle cx="430" cy="94"  r="5.5" fill="#BA7517" stroke="#7a4a00" stroke-width="0.8"/>
+  <circle cx="430" cy="123" r="5.5" fill="#378ADD" stroke="#185FA5" stroke-width="0.8"/>
+  <circle cx="430" cy="153" r="5.5" fill="#7F77DD" stroke="#4a40a8" stroke-width="0.8"/>
+  <circle cx="430" cy="184" r="5.5" fill="#888780" stroke="#5a5a58" stroke-width="0.8"/>
+  <circle cx="430" cy="214" r="5.5" fill="#D85A30" stroke="#a03818" stroke-width="0.8"/>
+  <circle cx="430" cy="244" r="5.5" fill="#639922" stroke="#3a6010" stroke-width="0.8"/>
+  <circle cx="430" cy="274" r="5.5" fill="#378ADD" stroke="#185FA5" stroke-width="0.8"/>
+
+  <!-- LEFT LABELS (text-anchor end at x=247) -->
+  <text x="247" y="76"  text-anchor="end" font-size="10.5" font-weight="500" fill="#e24b4a">5V → VCC (all sensors)</text>
+  <text x="247" y="105" text-anchor="end" font-size="10.5" font-weight="500" fill="#888780">GND (common ground)</text>
+  <text x="247" y="153" text-anchor="end" font-size="10.5" font-weight="500" fill="#D4537E">A0 / PC0 — LM35 Vout</text>
+  <text x="247" y="207" text-anchor="end" font-size="10.5" font-weight="500" fill="#1D9E75">A4 / PC4 (SDA) — LCD I²C</text>
+  <text x="247" y="236" text-anchor="end" font-size="10.5" font-weight="500" fill="#1D9E75">A5 / PC5 (SCL) — LCD I²C</text>
+
+  <!-- RIGHT LABELS (text-anchor start at x=438) -->
+  <text x="438" y="70"  text-anchor="start" font-size="10.5" font-weight="500" fill="#BA7517">D0 / PD0 (RX) ← SIM800L TX</text>
+  <text x="438" y="98"  text-anchor="start" font-size="10.5" font-weight="500" fill="#BA7517">D1 / PD1 (TX) → SIM800L RX</text>
+  <text x="438" y="127" text-anchor="start" font-size="10.5" font-weight="500" fill="#378ADD">D2 / PD2 → HC-SR04 Trig</text>
+  <text x="438" y="157" text-anchor="start" font-size="10.5" font-weight="500" fill="#7F77DD">D4 / PD4 ← PIR OUT</text>
+  <text x="438" y="188" text-anchor="start" font-size="10.5" font-weight="500" fill="#888780">D5 / PD5 → Relay IN</text>
+  <text x="438" y="218" text-anchor="start" font-size="10.5" font-weight="500" fill="#D85A30">D6 / PD6 → Red LED (220Ω)</text>
+  <text x="438" y="248" text-anchor="start" font-size="10.5" font-weight="500" fill="#639922">D7 / PD7 → Green LED (220Ω)</text>
+  <text x="438" y="278" text-anchor="start" font-size="10.5" font-weight="500" fill="#378ADD">D8 / PB0 (ICP1) ← HC-SR04 Echo</text>
+
+  <!-- Divider caption below board -->
+  <text x="342" y="299" text-anchor="middle" font-size="9" fill="var(--color-text-secondary)">left edge: power + analog   ·   right edge: digital</text>
+</svg>
+
+<div class="note">
+  ⚠ <strong>Circuit image vs firmware discrepancy:</strong> The diagram labels HC-SR04 Trig as <code>D9 (PB1)</code>, but the firmware configures <code>PORTD |= (1&lt;&lt;PD2)</code>, which is <strong>D2</strong>. Wire the trigger to <strong>D2</strong> as shown above. Also note the image incorrectly labels PD0 as "A0" — it is Digital 0 (RX). SIM800L VCC must use a <strong>separate 3.7–4.2 V LiPo</strong> supply, not Arduino's 5 V pin.
+</div>
+
+<div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-top:4px">
+<table class="pt">
+  <thead>
+    <tr>
+      <th>Component</th><th>Component pin</th><th>Arduino pin</th><th>Dir</th><th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="gh"><td colspan="5">HC-SR04 Ultrasonic Sensor</td></tr>
+    <tr><td style="color:#378ADD;font-weight:500">HC-SR04</td><td>VCC</td><td><span class="pb" style="background:#fcebeb;color:#a32d2d">5V</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">—</td></tr>
+    <tr><td style="color:#378ADD;font-weight:500">HC-SR04</td><td>GND</td><td><span class="pb" style="background:#f1efe8;color:#444441">GND</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">—</td></tr>
+    <tr><td style="color:#378ADD;font-weight:500">HC-SR04</td><td>Trig</td><td><span class="pb" style="background:#e6f1fb;color:#0c447c">D2 / PD2</span></td><td style="font-size:11px;color:var(--color-text-secondary)">OUT →</td><td style="font-size:12px">10 µs HIGH pulse to start measurement</td></tr>
+    <tr><td style="color:#378ADD;font-weight:500">HC-SR04</td><td>Echo</td><td><span class="pb" style="background:#e6f1fb;color:#0c447c">D8 / PB0 (ICP1)</span></td><td style="font-size:11px;color:var(--color-text-secondary)">← IN</td><td style="font-size:12px">Timer1 input capture; pulse width ÷ 928 = distance cm</td></tr>
+
+    <tr class="gh"><td colspan="5">PIR Motion Sensor</td></tr>
+    <tr><td style="color:#7F77DD;font-weight:500">PIR sensor</td><td>VCC</td><td><span class="pb" style="background:#fcebeb;color:#a32d2d">5V</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">—</td></tr>
+    <tr><td style="color:#7F77DD;font-weight:500">PIR sensor</td><td>GND</td><td><span class="pb" style="background:#f1efe8;color:#444441">GND</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">—</td></tr>
+    <tr><td style="color:#7F77DD;font-weight:500">PIR sensor</td><td>OUT</td><td><span class="pb" style="background:#eeedfe;color:#3c3489">D4 / PD4</span></td><td style="font-size:11px;color:var(--color-text-secondary)">← IN</td><td style="font-size:12px">HIGH = motion; read via <code style="font-family:var(--font-mono);font-size:11px">PIND &amp; (1&lt;&lt;PD4)</code></td></tr>
+
+    <tr class="gh"><td colspan="5">LM35 Temperature Sensor</td></tr>
+    <tr><td style="color:#D4537E;font-weight:500">LM35</td><td>VS+ (VCC)</td><td><span class="pb" style="background:#fcebeb;color:#a32d2d">5V</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">—</td></tr>
+    <tr><td style="color:#D4537E;font-weight:500">LM35</td><td>GND</td><td><span class="pb" style="background:#f1efe8;color:#444441">GND</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">—</td></tr>
+    <tr><td style="color:#D4537E;font-weight:500">LM35</td><td>Vout</td><td><span class="pb" style="background:#fbeaf0;color:#72243e">A0 / PC0</span></td><td style="font-size:11px;color:var(--color-text-secondary)">← ADC</td><td style="font-size:12px">10 mV/°C → Temp °C = (ADC_val × 4.88) / 10</td></tr>
+
+    <tr class="gh"><td colspan="5">SIM800L GSM Module</td></tr>
+    <tr><td style="color:#BA7517;font-weight:500">SIM800L</td><td>VCC</td><td><span class="pb" style="background:#faeeda;color:#633806">3.7–4.2 V ⚠</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">Separate LiPo / regulated supply — never Arduino 5V</td></tr>
+    <tr><td style="color:#BA7517;font-weight:500">SIM800L</td><td>GND</td><td><span class="pb" style="background:#f1efe8;color:#444441">GND (common)</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">Must share GND with Arduino</td></tr>
+    <tr><td style="color:#BA7517;font-weight:500">SIM800L</td><td>RX</td><td><span class="pb" style="background:#faeeda;color:#633806">D1 / PD1 (TX)</span></td><td style="font-size:11px;color:var(--color-text-secondary)">OUT →</td><td style="font-size:12px">Arduino TX → GSM RX; add 1kΩ/2kΩ divider for 3.3V tolerance</td></tr>
+    <tr><td style="color:#BA7517;font-weight:500">SIM800L</td><td>TX</td><td><span class="pb" style="background:#faeeda;color:#633806">D0 / PD0 (RX)</span></td><td style="font-size:11px;color:var(--color-text-secondary)">← IN</td><td style="font-size:12px">GSM TX → Arduino RX</td></tr>
+
+    <tr class="gh"><td colspan="5">16×2 LCD with I²C Backpack (PCF8574, address 0x27)</td></tr>
+    <tr><td style="color:#1D9E75;font-weight:500">LCD I²C</td><td>VCC</td><td><span class="pb" style="background:#fcebeb;color:#a32d2d">5V</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">—</td></tr>
+    <tr><td style="color:#1D9E75;font-weight:500">LCD I²C</td><td>GND</td><td><span class="pb" style="background:#f1efe8;color:#444441">GND</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">—</td></tr>
+    <tr><td style="color:#1D9E75;font-weight:500">LCD I²C</td><td>SDA</td><td><span class="pb" style="background:#e1f5ee;color:#085041">A4 / PC4</span></td><td style="font-size:11px;color:var(--color-text-secondary)">I²C</td><td style="font-size:12px">I²C data line; backpack has built-in pull-ups</td></tr>
+    <tr><td style="color:#1D9E75;font-weight:500">LCD I²C</td><td>SCL</td><td><span class="pb" style="background:#e1f5ee;color:#085041">A5 / PC5</span></td><td style="font-size:11px;color:var(--color-text-secondary)">I²C</td><td style="font-size:12px">I²C clock line; TWBR=0x48 → 100 kHz at 16 MHz</td></tr>
+
+    <tr class="gh"><td colspan="5">Single-Channel Relay Module</td></tr>
+    <tr><td style="color:#5F5E5A;font-weight:500">Relay</td><td>VCC</td><td><span class="pb" style="background:#fcebeb;color:#a32d2d">5V</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">—</td></tr>
+    <tr><td style="color:#5F5E5A;font-weight:500">Relay</td><td>GND</td><td><span class="pb" style="background:#f1efe8;color:#444441">GND</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">—</td></tr>
+    <tr><td style="color:#5F5E5A;font-weight:500">Relay</td><td>IN</td><td><span class="pb" style="background:#f1efe8;color:#444441">D5 / PD5</span></td><td style="font-size:11px;color:var(--color-text-secondary)">OUT →</td><td style="font-size:12px">Active HIGH — relay energises when D5 is HIGH</td></tr>
+
+    <tr class="gh"><td colspan="5">Status LEDs</td></tr>
+    <tr><td style="color:#D85A30;font-weight:500">Red LED</td><td>Anode (+)</td><td><span class="pb" style="background:#faece7;color:#712b13">D6 / PD6</span></td><td style="font-size:11px;color:var(--color-text-secondary)">OUT →</td><td style="font-size:12px">220 Ω in series to GND — ON = alert/intrusion active</td></tr>
+    <tr><td style="color:#D85A30;font-weight:500">Red LED</td><td>Cathode (–)</td><td><span class="pb" style="background:#f1efe8;color:#444441">GND</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">Via 220 Ω resistor</td></tr>
+    <tr><td style="color:#639922;font-weight:500">Green LED</td><td>Anode (+)</td><td><span class="pb" style="background:#eaf3de;color:#27500a">D7 / PD7</span></td><td style="font-size:11px;color:var(--color-text-secondary)">OUT →</td><td style="font-size:12px">220 Ω in series to GND — ON = system clear/standby</td></tr>
+    <tr><td style="color:#639922;font-weight:500">Green LED</td><td>Cathode (–)</td><td><span class="pb" style="background:#f1efe8;color:#444441">GND</span></td><td style="font-size:11px;color:var(--color-text-secondary)">Power</td><td style="font-size:12px">Via 220 Ω resistor</td></tr>
+  </tbody>
+</table>
+</div>
