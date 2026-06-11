@@ -1,0 +1,179 @@
+#define F_CPU 16000000UL 
+#include <avr/io.h>
+#include <util/delay.h>
+#include <stdio.h>
+#include <string.h>
+
+#define TEMP_THRESHOLD 35
+#define DIST_THRESHOLD 20
+#define GSM_NUMBER "\"+91XXXXXXXXXX\"" // Replace with your number
+#define LCD_ADDR 0x27
+
+void UART_Init(unsigned int baud) {
+    unsigned int ubrr = F_CPU/16/baud - 1;
+    UBRR0H = (unsigned char)(ubrr>>8);
+    UBRR0L = (unsigned char)ubrr;
+    UCSR0B = (1<<RXEN0) | (1<<TXEN0);
+    UCSR0C = (1<<UCSZ01) | (1<<UCSZ00);
+}
+void UART_TxChar(char data) {
+    while (!(UCSR0A & (1<<UDRE0)));
+    UDR0 = data;
+}
+void UART_TxString(const char* str) {
+    while (*str) UART_TxChar(*str++);
+}
+
+void ADC_Init() {
+    ADMUX = (1<<REFS0);
+    ADCSRA = (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);
+}
+uint16_t ADC_Read(uint8_t channel) {
+    ADMUX = (ADMUX & 0xF0) | (channel & 0x0F);
+    ADCSRA |= (1<<ADSC);
+    while (ADCSRA & (1<<ADSC));
+    return ADC;
+}
+
+void I2C_Init() {
+    TWSR = 0x00;
+    TWBR = 0x48;
+    TWCR = (1<<TWEN);
+}
+void I2C_Start() {
+    TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN);
+    while (!(TWCR & (1<<TWINT)));
+}
+void I2C_Stop() {
+    TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWSTO);
+}
+void I2C_Write(uint8_t data) {
+    TWDR = data;
+    TWCR = (1<<TWINT) | (1<<TWEN);
+    while (!(TWCR & (1<<TWINT)));
+}
+void LCD_Send(uint8_t value, uint8_t mode) {
+    uint8_t high_nibble = value & 0xF0;
+    uint8_t low_nibble = (value << 4) & 0xF0;
+    uint8_t data_arr[4];
+    data_arr[0] = high_nibble | mode | 0x08 | 0x04;
+    data_arr[1] = high_nibble | mode | 0x08 & ~0x04;
+    data_arr[2] = low_nibble | mode | 0x08 | 0x04;
+    data_arr[3] = low_nibble | mode | 0x08 & ~0x04;
+    I2C_Start();
+    I2C_Write(LCD_ADDR << 1);
+    for (uint8_t i = 0; i < 4; i++) I2C_Write(data_arr[i]);
+    I2C_Stop();
+}
+void LCD_Cmd(uint8_t cmd) { LCD_Send(cmd, 0); }
+void LCD_Char(char data) { LCD_Send(data, 1); }
+void LCD_Init() {
+    _delay_ms(50);
+    LCD_Cmd(0x33);
+    LCD_Cmd(0x32);
+    LCD_Cmd(0x28);
+    LCD_Cmd(0x0C);
+    LCD_Cmd(0x01);
+    _delay_ms(2);
+}
+void LCD_String(const char* str) {
+    while (*str) LCD_Char(*str++);
+}
+void LCD_SetCursor(uint8_t row, uint8_t col) {
+    uint8_t pos = (row == 0) ? (0x80 + col) : (0xC0 + col);
+    LCD_Cmd(pos);
+}
+
+uint16_t Get_Distance() {
+    PORTD |= (1<<PD2);
+    _delay_us(10);
+    PORTD &= ~(1<<PD2); 
+
+    TCNT1 = 0;
+    TCCR1B = 0x41; 
+    TIFR1 = (1<<ICF1);
+    TIFR1 = (1<<TOV1);
+
+    while ((TIFR1 & (1<<ICF1)) == 0) {
+        if (TIFR1 & (1<<TOV1)) return 0; 
+    }
+    
+    TCNT1 = 0;
+    TCCR1B = 0x01; 
+    TIFR1 = (1<<ICF1);
+    TIFR1 = (1<<TOV1);
+
+    while ((TIFR1 & (1<<ICF1)) == 0) {
+        if (TIFR1 & (1<<TOV1)) return 0; 
+    }
+    
+    return ICR1 / 928; 
+}
+
+void Send_SMS(const char* message) {
+    UART_TxString("AT+CMGF=1\r\n");
+    _delay_ms(1000);
+    UART_TxString("AT+CMGS=");
+    UART_TxString(GSM_NUMBER);
+    UART_TxString("\r\n");
+    _delay_ms(1000);
+    UART_TxString(message);
+    UART_TxChar(26);
+    _delay_ms(5000);
+}
+
+int main(void) {
+    DDRD |= (1<<PD2) | (1<<PD5) | (1<<PD6) | (1<<PD7); 
+    DDRD &= ~(1<<PD4); 
+    DDRB &= ~(1<<PB0); 
+    DDRC &= ~(1<<PC0); 
+
+    PORTD &= ~(1<<PD5) & ~(1<<PD6); 
+    PORTD |= (1<<PD7);              
+
+    UART_Init(9600);
+    ADC_Init();
+    I2C_Init();
+    LCD_Init();
+
+    LCD_String("System Active");
+    _delay_ms(2000);
+    LCD_Cmd(0x01);
+
+    char lcd_buffer[16];
+    uint8_t sms_sent_flag = 0;
+
+    while (1) {
+        uint8_t temp = (ADC_Read(0) * 4.88) / 10; 
+        uint16_t distance = Get_Distance();
+        uint8_t motion = (PIND & (1<<PD4)) >> PD4;
+
+        
+        LCD_SetCursor(0,0);
+        sprintf(lcd_buffer, "T:%dC D:%dcm  ", temp, distance);
+        LCD_String(lcd_buffer);
+
+        LCD_SetCursor(1,0);
+        if (motion) LCD_String("PIR: MOTION!    ");
+        else LCD_String("PIR: Clear      ");
+
+        
+        if (motion || (distance > 0 && distance < DIST_THRESHOLD) || temp > TEMP_THRESHOLD) {
+            PORTD |= (1<<PD5) | (1<<PD6); 
+            PORTD &= ~(1<<PD7);           
+            
+            if (!sms_sent_flag) {
+                LCD_Cmd(0x01);
+                LCD_String("SENDING ALERT...");
+                Send_SMS("ALERT! Intrusion or Fire Detected.");
+                sms_sent_flag = 1;
+                LCD_Cmd(0x01);
+            }
+        } else {
+            PORTD &= ~(1<<PD5) & ~(1<<PD6); 
+            PORTD |= (1<<PD7);              
+            sms_sent_flag = 0;
+        }
+        _delay_ms(500); 
+    }
+}
